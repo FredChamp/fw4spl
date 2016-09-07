@@ -1,9 +1,19 @@
-fwLoadProperties()
+cmake_minimum_required( VERSION 3.1 )
+
+project(fwCamp VERSION 0.1)
+
 find_package(CAMP REQUIRED)
 
-fwForwardInclude(
+set(PUBLIC_INCLUDES
     ${CAMP_INCLUDE_DIR}
 )
 
-fwForwardLink(${CAMP_LIBRARIES})
+set(PUBLIC_LINKS
+    ${CAMP_LIBRARIES}
+)
 
+set(PRIVATE_LINKS
+    fwCore
+)
+
+add_target()

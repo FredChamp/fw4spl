@@ -1,5 +1,18 @@
-fwLoadProperties()
+cmake_minimum_required( VERSION 3.1 )
+
+project(fwServices VERSION 0.1)
 
 find_package(Boost COMPONENTS regex REQUIRED)
-fwLink(${Boost_REGEX_LIBRARY})
-fwForwardInclude(${Boost_INCLUDE_DIRS})
+
+set(PUBLIC_INCLUDES
+    ${Boost_INCLUDE_DIRS}
+)
+set(PRIVATE_LINKS
+    ${Boost_REGEX_LIBRARY}
+    fwActivities
+    fwCom
+    fwDataCamp
+    fwRuntime
+)
+
+add_target()

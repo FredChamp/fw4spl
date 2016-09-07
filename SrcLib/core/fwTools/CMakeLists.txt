@@ -1,4 +1,18 @@
-fwLoadProperties()
+cmake_minimum_required( VERSION 3.1 )
+
+project(fwTools VERSION 0.1)
 
 find_package (Boost COMPONENTS regex signals REQUIRED)
-fwLink(${Boost_LIBRARIES})
+
+set(PUBLIC_LINKS
+    ${Boost_LIBRARIES}
+    fwCore
+)
+
+if(ANDROID)
+    list(APPEND PRIVATE_LINKS
+            fwRuntime
+    )
+endif()
+    
+add_target()

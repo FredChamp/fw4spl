@@ -52,7 +52,7 @@ std::shared_ptr< ::fwRuntime::profile::Profile > ProfileReader::createProfile( c
 
     // Validation
     std::ostringstream fileLocation;
-    fileLocation << "share/fwRuntime_" <<  FWRUNTIME_VER << "/profile.xsd";
+    fileLocation << "share/fwRuntime_" <<  fwRuntime_VERSION << "/profile.xsd";
     const ::boost::filesystem::path profileXSDLocation(
         ::fwRuntime::Runtime::getDefault()->getWorkingPath() / fileLocation.str() );
 

@@ -103,7 +103,7 @@ std::shared_ptr<Bundle> BundleDescriptorReader::createBundle(const ::boost::file
 
     // Validation
     std::ostringstream fileLocation;
-    fileLocation << "share/fwRuntime_" <<  FWRUNTIME_VER << "/plugin.xsd";
+    fileLocation << "share/fwRuntime_" <<  fwRuntime_VERSION << "/plugin.xsd";
     const ::boost::filesystem::path pluginXSDLocation(
         ::fwRuntime::Runtime::getDefault()->getWorkingPath() / fileLocation.str() );
 
@@ -175,7 +175,7 @@ throw ( RuntimeException )
 
     // Validation
     std::ostringstream fileLocation;
-    fileLocation << "share/fwRuntime_" <<  FWRUNTIME_VER << "/plugin.xsd";
+    fileLocation << "share/fwRuntime_" <<  fwRuntime_VERSION << "/plugin.xsd";
     const ::boost::filesystem::path pluginXSDLocation(
         ::fwRuntime::Runtime::getDefault()->getWorkingPath() / fileLocation.str() );
 

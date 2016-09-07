@@ -1,6 +1,17 @@
-fwLoadProperties()
+cmake_minimum_required( VERSION 3.1 )
 
+project(fwLog VERSION 0.1)
 
 find_package (Boost REQUIRED)
-fwForwardInclude(${Boost_INCLUDE_DIRS})
 
+set(PUBLIC_INCLUDES
+    ${Boost_INCLUDE_DIRS}
+)
+
+set(PRIVATE_LINKS
+    fwCore
+    fwData
+    fwTools
+)
+
+add_target()
