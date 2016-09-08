@@ -1,5 +1,3 @@
-cmake_minimum_required( VERSION 3.1 )
-
 project(fwActivities VERSION 0.1)
 
 find_package (Boost COMPONENTS regex REQUIRED)
@@ -11,7 +9,8 @@ set(PUBLIC_LINKS
     fwCore
     fwData
     fwDataCamp
-    fwMath fwMedData
+    fwMath
+    fwMedData
     fwRuntime
     fwTools
 )

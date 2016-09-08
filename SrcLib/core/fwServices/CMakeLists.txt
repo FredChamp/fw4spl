@@ -1,5 +1,3 @@
-cmake_minimum_required( VERSION 3.1 )
-
 project(fwServices VERSION 0.1)
 
 find_package(Boost COMPONENTS regex REQUIRED)
@@ -7,7 +5,7 @@ find_package(Boost COMPONENTS regex REQUIRED)
 set(PUBLIC_INCLUDES
     ${Boost_INCLUDE_DIRS}
 )
-set(PRIVATE_LINKS
+set(PUBLIC_LINKS
     ${Boost_REGEX_LIBRARY}
     fwActivities
     fwCom

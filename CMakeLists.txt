@@ -7,6 +7,8 @@ enable_testing()
 
 include(CheckVariableExists)
 include(CMakeParseArguments)
+include(GetPrerequisites)
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/CMake/build/macro.cmake)
 
 set(BUILD_SHARED_LIBS ON)
@@ -160,4 +162,10 @@ elseif(USE_SYSTEM_LIB)
     endforeach()
 endif()
 
+add_subdirectory(fwlauncher)
+
 add_subdirectory(SrcLib)
+
+add_subdirectory(Bundles)
+
+add_subdirectory(Samples)

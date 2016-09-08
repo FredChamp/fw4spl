@@ -1,5 +1,3 @@
-cmake_minimum_required( VERSION 3.1 )
-
 project(fwGuiQt VERSION 0.1)
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/bin/qt.conf" "${CMAKE_BINARY_DIR}/bin/qt.conf")

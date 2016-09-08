@@ -1,5 +1,3 @@
-cmake_minimum_required( VERSION 3.1 )
-
 project(fwThread VERSION 0.1)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

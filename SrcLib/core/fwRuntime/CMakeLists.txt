@@ -1,5 +1,3 @@
-cmake_minimum_required( VERSION 3.1 )
-
 project(fwRuntime VERSION 0.3)
 
 find_package (Boost COMPONENTS regex REQUIRED)
