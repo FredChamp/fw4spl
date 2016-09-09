@@ -1,4 +1,4 @@
-<profile name="@PROJECT@" version="@PROJECT_VERSION@" check-single-instance="@UNIQUE@">
+<profile name="@PROJECT_NAME@" version="@PROJECT_VERSION@" check-single-instance="@UNIQUE@">
 
 @ACTIVATE_LIST@
 @START_BUNDLE_LIST@

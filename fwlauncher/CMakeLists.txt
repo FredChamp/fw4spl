@@ -4,7 +4,7 @@ set(TYPE EXECUTABLE)
 
 find_package (Boost COMPONENTS program_options REQUIRED)
 
-set(PIRVATE_LINKS
+set(PRIVATE_LINKS
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
     fwCore
     fwRuntime

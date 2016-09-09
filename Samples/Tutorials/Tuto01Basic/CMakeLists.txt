@@ -9,4 +9,7 @@ set(PRIVATE_LINKS
     appXml2 # to parse the application configuration
 )
 
+# Set the configuration to use : 'tutoBasicConfig'
+bundleParam(appXml2 PARAM_LIST config PARAM_VALUES tutoBasicConfig) 
+
 add_target() # create a cmake target

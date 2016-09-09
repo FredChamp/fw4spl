@@ -1,5 +1,7 @@
 project(guiQt VERSION 0.1)
 
+set(START ON)
+
 find_package(Boost COMPONENTS Regex REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
 
