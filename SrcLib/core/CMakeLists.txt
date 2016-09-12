@@ -1,4 +1,8 @@
 add_subdirectory(fwActivities)
+add_subdirectory(fwAtomConversion)
+add_subdirectory(fwAtoms)
+add_subdirectory(fwAtomsFilter)
+add_subdirectory(fwAtomsPatch)
 add_subdirectory(fwCamp)
 add_subdirectory(fwCom)
 add_subdirectory(fwComEd)
