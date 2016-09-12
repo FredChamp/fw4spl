@@ -11,37 +11,36 @@ macro(add_target)
         
         set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/bin)
         
-        set_property(TARGET ${PROJECT_NAME} PROPERTY DEPENDENCIES ${PRIVATE_LINKS} ${PUBLIC_LINKS})
-        set_property(TARGET ${PROJECT_NAME} PROPERTY F4S_TYPE ${TYPE})
-        set_property(TARGET ${PROJECT_NAME} PROPERTY DASH_VERSION ${DASH_VERSION})
+        set_target_properties(${PROJECT_NAME}
+            PROPERTIES
+            DEPENDENCIES ${PRIVATE_LINKS};${PUBLIC_LINKS}
+            F4S_TYPE ${TYPE}
+            DASH_VERSION ${DASH_VERSION}
+            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Exec}
+            FOLDER "Exec"
+        )
     
     elseif( TYPE STREQUAL "APP" )
         add_custom_target(${PROJECT_NAME}
-            # COMMAND ${CMAKE_MAKE_PROGRAM} ${PRIVATE_LINKS}
-            # WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         )
         add_dependencies(${PROJECT_NAME} ${PRIVATE_LINKS})
-        
-        
-        # DEPENDS
-        # Reference files and outputs of custom commands created with add_custom_command() command calls in the same directory (CMakeLists.txt file). They will be brought up to date when the target is built.
-        #
-        # Use the add_dependencies() command to add dependencies on other targets.
-        #
-        # SOURCES
-        # Specify additional source files to be included in the custom target. Specified source files will be added to IDE project files for convenience in editing even if they have no build rules.
+
+        set(RESSOURCES_BUILD_PATH ${CMAKE_BINARY_DIR}/Bundles/${PROJECT_NAME}_${DASH_VERSION})
         set(RESSOURCES_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/bundles/${PROJECT_NAME}_${DASH_VERSION})
         
-        set_property(TARGET ${PROJECT_NAME} PROPERTY DEPENDENCIES ${PRIVATE_LINKS} ${PUBLIC_LINKS})
-        set_property(TARGET ${PROJECT_NAME} PROPERTY F4S_TYPE ${TYPE})
-        set_property(TARGET ${PROJECT_NAME} PROPERTY DASH_VERSION ${DASH_VERSION})
+        set_target_properties(${PROJECT_NAME}
+            PROPERTIES
+            DEPENDENCIES "${PRIVATE_LINKS};${PUBLIC_LINKS}"
+            F4S_TYPE ${TYPE}
+            DASH_VERSION ${DASH_VERSION}
+            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Bundles/${PROJECT_NAME}_${DASH_VERSION}"
+            FOLDER "Apps"
+        )
         
         # Add each requirements to the activate list
-        set(APP_DEPENDENCIES "")
         findRequirements(${PROJECT_NAME} APP_DEPENDENCIES)
         list(REMOVE_DUPLICATES APP_DEPENDENCIES)
         list(SORT APP_DEPENDENCIES)
-        
         foreach(CURRENT_DEPENDENCY ${APP_DEPENDENCIES})
             get_property(DEPENDENCY_DASH_VERSION TARGET ${CURRENT_DEPENDENCY} PROPERTY DASH_VERSION)
             get_property(DEPENDENCY_START TARGET ${CURRENT_DEPENDENCY} PROPERTY START)
@@ -86,7 +85,8 @@ macro(add_target)
         if(NOT UNIQUE)
             set(UNIQUE false)
         endif()
-        configure_file("${CMAKE_SOURCE_DIR}/CMake/build/profile.xml.in"    "${RESSOURCES_INSTALL_PATH}/profile.xml")
+        configure_file(${CMAKE_SOURCE_DIR}/CMake/build/profile.xml.in ${RESSOURCES_BUILD_PATH}/profile.xml)
+        install(FILES ${RESSOURCES_BUILD_PATH}/profile.xml DESTINATION ${RESSOURCES_INSTALL_PATH})
         
     else()
         if(SRCS)
@@ -97,31 +97,45 @@ macro(add_target)
             string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPCASE)
             
             configure_file(
-                "${CMAKE_SOURCE_DIR}/CMake/build/config.hpp.in"
-                "${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/config.hpp"
+                ${CMAKE_SOURCE_DIR}/CMake/build/config.hpp.in
+                ${CMAKE_CURRENT_BINARY_DIR}/include/${PROJECT_NAME}/config.hpp
                 IMMEDIATE @ONLY)
             
-            target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include/")
+            target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include)
         endif()
         
         if( TYPE STREQUAL "LIBRARY" )
             set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib)
+            set(RESSOURCES_BUILD_PATH ${CMAKE_BINARY_DIR}/share/${PROJECT_NAME}_${DASH_VERSION})
             set(RESSOURCES_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}_${DASH_VERSION})
+            set_target_properties(${PROJECT_NAME}
+                PROPERTIES
+                DEPENDENCIES "${PRIVATE_LINKS};${PUBLIC_LINKS}"
+                F4S_TYPE ${TYPE}
+                DASH_VERSION ${DASH_VERSION}
+                LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/SrcLib
+                FOLDER SrcLib
+            )
         elseif( TYPE STREQUAL "BUNDLE" )
             set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/bundles/${PROJECT_NAME}_${DASH_VERSION})
+            set(RESSOURCES_BUILD_PATH ${CMAKE_BINARY_DIR}/bundles/${PROJECT_NAME}_${DASH_VERSION})
             set(RESSOURCES_INSTALL_PATH ${LIBRARY_INSTALL_PATH})
-            set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_${DASH_VERSION})
+            
+            set_target_properties(${PROJECT_NAME}
+                PROPERTIES
+                OUTPUT_NAME ${PROJECT_NAME}_${DASH_VERSION}
+                DEPENDENCIES "${PRIVATE_LINKS};${PUBLIC_LINKS}"
+                F4S_TYPE ${TYPE}
+                DASH_VERSION ${DASH_VERSION}
+                LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Bundles/${PROJECT_NAME}_${DASH_VERSION}
+                FOLDER "Bundles"
+            )
             if(START STREQUAL ON)
                 set_target_properties(${PROJECT_NAME} PROPERTIES START ${START})
             endif()
         elseif( TYPE STREQUAL "TEST" )
         endif()
-        
-        #use set_property instead
-        set_property(TARGET ${PROJECT_NAME} PROPERTY DEPENDENCIES ${PRIVATE_LINKS} ${PUBLIC_LINKS})
-        set_property(TARGET ${PROJECT_NAME} PROPERTY F4S_TYPE ${TYPE})
-        set_property(TARGET ${PROJECT_NAME} PROPERTY DASH_VERSION ${DASH_VERSION})
-        
+
     endif()
     
     if(SRCS)
@@ -135,23 +149,27 @@ macro(add_target)
 
         target_link_libraries(${PROJECT_NAME} PUBLIC ${PUBLIC_LINKS})
         target_link_libraries(${PROJECT_NAME} PRIVATE ${PRIVATE_LINKS})
-        
+
         install(TARGETS ${PROJECT_NAME}
                 DESTINATION ${LIBRARY_INSTALL_PATH}
-        )
+            )
+    
     endif()
     
     if(RCS)
         foreach(RESSOURCE_FILE ${RCS})
             
             get_filename_component(FILE_NAME ${RESSOURCE_FILE} NAME)
-            if(NOT IS_DIRECTORY ${RESSOURCES_INSTALL_PATH})
-                file(MAKE_DIRECTORY ${RESSOURCES_INSTALL_PATH})
+            if(NOT IS_DIRECTORY ${RESSOURCES_BUILD_PATH})
+                file(MAKE_DIRECTORY ${RESSOURCES_BUILD_PATH})
             endif()
-            configure_file(${RESSOURCE_FILE} ${RESSOURCES_INSTALL_PATH}/${NAME})
+            # if(NOT IS_DIRECTORY ${RESSOURCES_INSTALL_PATH})
+            #     file(MAKE_DIRECTORY ${RESSOURCES_INSTALL_PATH})
+            # endif()
+            configure_file(${RESSOURCE_FILE} ${RESSOURCES_BUILD_PATH}/${FILE_NAME})
+            install(FILES ${RESSOURCES_BUILD_PATH}/${FILE_NAME} DESTINATION ${RESSOURCES_INSTALL_PATH})
         endforeach()
     endif()
-    
 
 endmacro(add_target)
 
@@ -159,7 +177,7 @@ function(findRequirements TARGET_NAME)
     if(TARGET ${TARGET_NAME})
         get_property(PROJECT_TYPE TARGET ${TARGET_NAME} PROPERTY F4S_TYPE)
         if( PROJECT_TYPE STREQUAL "BUNDLE" OR PROJECT_TYPE STREQUAL "APP")
-            list(APPEND APP_DEPENDENCIES  ${TARGET_NAME})
+            list(APPEND APP_DEPENDENCIES ${TARGET_NAME})
             
             get_property(DEPENDENCIES TARGET ${TARGET_NAME} PROPERTY DEPENDENCIES)
             foreach(DEPENDENCY ${DEPENDENCIES})
@@ -174,5 +192,5 @@ macro(bundleParam BUNDLE_NAME)
     set(options)
     set(oneValueArgs)
     set(multiValueArgs PARAM_VALUES PARAM_LIST)
-    cmake_parse_arguments("${BUNDLE_NAME}" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+    cmake_parse_arguments(${BUNDLE_NAME} "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 endmacro()
