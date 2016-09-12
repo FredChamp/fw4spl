@@ -18,6 +18,4 @@ set(PRIVATE_LINKS
 
 add_target()
 
-message(" dash " = ${DASH_VERSION})
 add_definitions(-D${PROJECT_NAME}_VERSION="${DASH_VERSION}") #used to find xsd path
-message(" dash2 " = ${DASH_VERSION})
