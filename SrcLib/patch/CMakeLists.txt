@@ -1,0 +1,2 @@
+add_subdirectory(fwMDSemanticPatch)
+add_subdirectory(fwStructuralPatch)

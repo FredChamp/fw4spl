@@ -14,8 +14,8 @@ namespace fwMDSemanticPatch
 void PatchLoader::loadPatches()
 {
     SPTR(::fwAtomsPatch::VersionsManager) versionManager = ::fwAtomsPatch::VersionsManager::getDefault();
-    versionManager->buildVersionTable("./share/fwMDSemanticPatch_" FWMDSEMANTICPATCH_VER "/");
-    versionManager->buildLinkTable("./share/fwMDSemanticPatch_" FWMDSEMANTICPATCH_VER "/");
+    versionManager->buildVersionTable("./share/fwMDSemanticPatch_" fwMDSemanticPatch_VERSION "/");
+    versionManager->buildLinkTable("./share/fwMDSemanticPatch_" fwMDSemanticPatch_VERSION "/");
 }
 
 //------------------------------------------------------------------------------
