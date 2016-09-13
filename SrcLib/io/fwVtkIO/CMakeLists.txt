@@ -1,40 +1,47 @@
-fwLoadProperties()
+project(fwVtkIO VERSION 0.1)
 
-if(NOT ANDROID)
-    find_package(VTK COMPONENTS     
+ if(NOT ANDROID) 
+    find_package(VTK COMPONENTS
         vtkFiltersModeling
         vtkIOImage
         vtkIOLegacy
         vtkIOXML
-        vtkImagingStencil
-        vtkImagingStatistics
         vtkFiltersGeometry
-        vtkInteractionStyle
         vtkIOExport
-        vtkRenderingFreeTypeOpenGL
         REQUIRED
         NO_MODULE)
-else()
+ else()
     find_package(VTK COMPONENTS     
         vtkFiltersModeling
         vtkIOImage
         vtkIOLegacy
         vtkIOXML
-        vtkImagingStencil
-        vtkImagingStatistics
         vtkFiltersGeometry
         vtkInteractionStyle
         vtkRenderingOpenGL2
-        REQUIRED
-        NO_MODULE)
-endif()
+        vtkRenderingFreeType
+         REQUIRED
+         NO_MODULE)
+ endif()
+
 
 include(${VTK_USE_FILE})
 
-fwForwardInclude(
+set(PUBLIC_INCLUDES
     ${VTK_INCLUDE_DIRS}
 )
 
-fwLink(
+set(PRIVATE_LINKS
     ${VTK_LIBRARIES}
+    fwComEd
+    fwCore
+    fwData
+    fwDataIO
+    fwMath
+    fwMedData
+    fwMemory
+    fwTools
+    fwJobs
 )
+
+add_target()

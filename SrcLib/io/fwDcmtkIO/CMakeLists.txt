@@ -1,12 +1,30 @@
-fwLoadProperties()
-
-
-#racy compatibility
+project(fwDcmtkIO VERSION 0.1)
 
 find_package(Boost COMPONENTS filesystem regex REQUIRED)
-fwForwardInclude( ${Boost_INCLUDE_DIRS} )
-fwLink( ${Boost_REGEX_LIBRARY} )
-
 find_package(DCMTK REQUIRED)
-fwForwardInclude( ${DCMTK_config_INCLUDE_DIRS} )
-fwLink( ${DCMTK_LIBRARIES} )
+
+set(PUBLIC_INCLUDES
+    ${Boost_INCLUDE_DIRS}
+    ${DCMTK_config_INCLUDE_DIRS}
+)
+
+set(PRIVATE_LINKS
+    ${Boost_REGEX_LIBRARY}
+    ${DCMTK_LIBRARIES}
+    fwCore
+    fwDataIO
+    fwTools
+    fwData
+    fwThread
+    fwMedData
+    fwCom
+    fwComEd
+    fwZip
+    fwDicomIOFilter
+    fwDicomTools
+    fwDcmtkTools
+    fwMemory
+    fwLog
+)
+
+add_target()

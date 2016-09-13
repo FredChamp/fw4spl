@@ -4,13 +4,13 @@ find_package (Boost COMPONENTS regex signals iostreams REQUIRED)
 
 set(PRIVATE_LINKS
     ${Boost_LIBRARIES}
-    fwCamp
     fwThread
     fwTools
 )
 
 set(PUBLIC_LINKS
     fwCom
+    fwCamp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

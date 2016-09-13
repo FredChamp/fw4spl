@@ -1,4 +1,4 @@
-fwLoadProperties()
+project(fwItkIO VERSION 0.1)
 
 find_package(ITK REQUIRED)
 find_package(JPEG REQUIRED)
@@ -12,9 +12,7 @@ find_library(V3P_NETLIB_LIBRARY v3p_netlib )
 find_library(JPEG_LIBRARY libjpeg)
 find_path(VNL_INCLUDE_PATH  vxl/core/vnl/vnl_alloc.h)
 
-fwInclude(${ZLIB_INCLUDE_DIRS})
-
-fwForwardInclude(
+set(PUBLIC_INCLUDES
     ${ITK_INCLUDE_DIRS}
     ${VNL_INCLUDE_PATH}
     ${VNL_INCLUDE_PATH}/vxl
@@ -22,13 +20,12 @@ fwForwardInclude(
     ${VNL_INCLUDE_PATH}/vxl/vcl
 )
 
-fwLink(
-    ${ZLIB_LIBRARIES}
-    ${JPEG_LIBRARY}
+set(PRIVATE_INCLUDES
+    ${ZLIB_INCLUDE_DIRS}
 )
 
 # Since ITK is template-based, this make sense to force the link for dependencies
-fwForwardLink(
+set(PUBLIC_LINKS
     ${VNL_LIBRARY}
     ${VNL_ALGO_LIBRARY}
     ${VCL_LIBRARY}
@@ -43,3 +40,15 @@ fwForwardLink(
     itkopenjpeg
 )
 
+
+set(PRIVATE_LINKS
+    ${ZLIB_LIBRARIES}
+    ${JPEG_LIBRARY}
+    fwComEd
+    fwCore
+    fwData
+    fwDataIO
+    fwTools
+)
+
+add_target()

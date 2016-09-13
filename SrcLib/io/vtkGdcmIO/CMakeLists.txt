@@ -1,15 +1,15 @@
-fwLoadProperties()
+project(vtkGdcmIO VERSION 0.1)
 
 find_package(VTK REQUIRED)
 find_package(GDCM REQUIRED)
+
 include(${GDCM_USE_FILE})
 
-fwForwardInclude(
+set(PUBLIC_INCLUDES
     ${GDCM_INCLUDE_DIRS}
 )
 
-
-fwLink(
+set(PRIVATE_LINKS
     ${GDCM_LIBRARIES}
 
     vtkInteractionStyle
@@ -22,4 +22,15 @@ fwLink(
     gdcmMSFF
     gdcmDSED
     gdcmCommon
+    
+    fwCore
+    fwData
+    fwDataIO
+    fwMedData
+    fwMemory
+    fwTools
+    fwVtkIO
+    fwJobs
 )
+
+add_target()

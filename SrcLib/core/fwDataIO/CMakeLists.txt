@@ -16,6 +16,9 @@ set(PRIVATE_LINKS
     fwData
     fwDataTools
     fwTools
+)
+
+set(PUBLIC_LINKS
     fwJobs
 )
 

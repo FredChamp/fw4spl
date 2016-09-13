@@ -53,7 +53,7 @@ void Equipment::writeGeneralEquipmentModule()
     ::fwGdcmIO::helper::DicomData::setTagValue< 0x0008, 0x1090 >("FW4SPL_FWGDCMIO", dataset);
 
     // Device Serial Number - Type 3 (Type 1 for EnhancedGeneralEquipmentModule)
-    std::string deviceSerialNumber = std::string(FWGDCMIO_VER);
+    std::string deviceSerialNumber = std::string(fwGdcmIO_VERSION);
     ::fwGdcmIO::helper::DicomData::setTagValue< 0x0018, 0x1000 >(deviceSerialNumber, dataset);
 
     // Software Versions - Type 3 (Type 1 for EnhancedGeneralEquipmentModule)

@@ -1,11 +1,40 @@
-fwLoadProperties()
-
+project(fwGdcmIO VERSION 0.1)
 
 find_package(Boost COMPONENTS filesystem REQUIRED)
-fwForwardInclude(${Boost_INCLUDE_DIRS})
-fwLink(${Boost_LIBRARIES})
-
 find_package(GDCM REQUIRED)
+
 include(${GDCM_USE_FILE})
-fwForwardInclude(${GDCM_INCLUDE_DIRS})
-fwLink(${GDCM_LIBRARIES} gdcmCommon gdcmMSFF)
+
+set(PUBLIC_INCLUDES
+    ${Boost_INCLUDE_DIRS}
+    ${GDCM_INCLUDE_DIRS}
+)
+
+set(PRIVATE_LINKS
+    ${Boost_LIBRARIES}
+    ${GDCM_LIBRARIES}
+    gdcmCommon
+    gdcmMSFF
+    fwCore
+    fwData
+    fwMath
+    fwMedData
+    fwDataIO
+    fwTools
+    fwComEd
+    fwRuntime
+    fwDicomIOFilter
+    fwLog
+    fwJobs
+    fwCom
+    fwZip
+    fwDicomTools
+    fwDataTools
+    fwServices
+    fwDicomTools
+)
+
+add_target()
+
+add_definitions(-D${PROJECT_NAME}_VERSION="${DASH_VERSION}")
+
