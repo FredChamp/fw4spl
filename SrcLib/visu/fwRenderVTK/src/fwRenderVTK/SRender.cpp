@@ -94,9 +94,12 @@ void SRender::configureRenderer( ConfigurationType conf )
     {
         m_renderers[id] = vtkRenderer::New();
 
+//vtk depth peeling not available on android (Offscreen rendering issues)
+#ifndef ANDROID
         m_renderers[id]->SetUseDepthPeeling     ( 1  );
         m_renderers[id]->SetMaximumNumberOfPeels( 8  );
         m_renderers[id]->SetOcclusionRatio      ( 0. );
+#endif
 
         if(conf->hasAttribute("layer") )
         {
@@ -285,8 +288,6 @@ void SRender::configureVtkObject( ConfigurationType conf )
         {
             m_vtkObjects[id] = vtkInstantiator::CreateInstance(vtkClass.c_str());
         }
-
-
     }
 }
 
@@ -665,60 +666,77 @@ void SRender::updating() throw(fwTools::Failed)
 
 void SRender::swapping(const IService::KeyType& key) throw(::fwTools::Failed)
 {
+    if (this->isVersion2())
+    {
+        // remove connections
+        if(m_objectConnections.find(key) != m_objectConnections.end())
+        {
+            m_objectConnections[key].disconnect();
+            m_objectConnections.erase(key);
+        }
+        ::fwServices::helper::Config::disconnectProxies(key, m_proxyMap);
+    }
+
     std::vector< ConfigurationType > confVec = m_sceneConfiguration->find("adaptor","objectId", key);
     for( ConfigurationType cfg : confVec )
     {
         this->configureObject(cfg);
     }
+
+    // create connections
+    this->connectAfterWait(key);
 }
 
 //-----------------------------------------------------------------------------
 
 void SRender::render()
 {
-    if (m_offScreen)
+    if (this->isStarted())
     {
-        vtkSmartPointer<vtkRenderWindow> renderWindow = m_interactorManager->getInteractor()->GetRenderWindow();
-
-        renderWindow->Render();
-
-        vtkSmartPointer<vtkWindowToImageFilter> windowToImageFilter = vtkWindowToImageFilter::New();
-        windowToImageFilter->SetInputBufferTypeToRGBA();
-        windowToImageFilter->SetInput( renderWindow );
-        windowToImageFilter->Update();
-
-        vtkImageData* vtkImage = windowToImageFilter->GetOutput();
-        ::fwData::Image::sptr image;
-        if (!this->isVersion2())
+        if (m_offScreen)
         {
-            ::fwData::Composite::sptr composite = this->getComposite();
-            image                               = composite->at< ::fwData::Image >(m_offScreenImageKey);
+            vtkSmartPointer<vtkRenderWindow> renderWindow = m_interactorManager->getInteractor()->GetRenderWindow();
+
+            renderWindow->Render();
+
+            vtkSmartPointer<vtkWindowToImageFilter> windowToImageFilter = vtkWindowToImageFilter::New();
+            windowToImageFilter->SetInputBufferTypeToRGBA();
+            windowToImageFilter->SetInput( renderWindow );
+            windowToImageFilter->Update();
+
+            vtkImageData* vtkImage = windowToImageFilter->GetOutput();
+            ::fwData::Image::sptr image;
+            if (!this->isVersion2())
+            {
+                ::fwData::Composite::sptr composite = this->getComposite();
+                image                               = composite->at< ::fwData::Image >(m_offScreenImageKey);
+            }
+            else
+            {
+                image = this->getInOut< ::fwData::Image >(m_offScreenImageKey);
+            }
+            SLM_ASSERT("Image '" + m_offScreenImageKey + "' not found.", image);
+
+            {
+                ::fwData::mt::ObjectWriteLock lock(image);
+                ::fwVtkIO::fromVTKImage(vtkImage, image);
+            }
+
+            auto sig = image->signal< ::fwData::Object::ModifiedSignalType >(::fwData::Object::s_MODIFIED_SIG);
+            {
+                ::fwCom::Connection::Blocker block(sig->getConnection(m_slotUpdate));
+                sig->asyncEmit();
+            }
+
+            // If we don't do explicitly, the filter is not destroyed and this leads to a huge memory leak
+            windowToImageFilter->Delete();
         }
         else
         {
-            image = this->getInOut< ::fwData::Image >(m_offScreenImageKey);
+            m_interactorManager->getInteractor()->Render();
         }
-        SLM_ASSERT("Image '" + m_offScreenImageKey + "' not found.", image);
-
-        {
-            ::fwData::mt::ObjectWriteLock lock(image);
-            ::fwVtkIO::fromVTKImage(vtkImage, image);
-        }
-
-        auto sig = image->signal< ::fwData::Object::ModifiedSignalType >(::fwData::Object::s_MODIFIED_SIG);
-        {
-            ::fwCom::Connection::Blocker block(sig->getConnection(m_slotUpdate));
-            sig->asyncEmit();
-        }
-
-        // If we don't do explicitly, the filter is not destroyed and this leads to a huge memory leak
-        windowToImageFilter->Delete();
+        this->setPendingRenderRequest(false);
     }
-    else
-    {
-        m_interactorManager->getInteractor()->Render();
-    }
-    this->setPendingRenderRequest(false);
 }
 
 //-----------------------------------------------------------------------------
@@ -869,7 +887,6 @@ vtkTransform* SRender::getOrAddVtkTransform( const VtkObjectIdType& _id )
 
 void SRender::connectAfterWait(::fwData::Composite::ContainerType objects)
 {
-
     for(::fwData::Composite::value_type element :  objects)
     {
         for(::fwRuntime::ConfigurationElement::sptr connect :  m_connect)
@@ -879,6 +896,32 @@ void SRender::connectAfterWait(::fwData::Composite::ContainerType objects)
         for(::fwRuntime::ConfigurationElement::sptr proxy :  m_proxies)
         {
             this->manageProxy(element.first, element.second, proxy);
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void SRender::connectAfterWait(const std::string& key)
+{
+    if (this->isVersion2())
+    {
+        ::fwData::Object::csptr obj;
+        obj = this->getInput< ::fwData::Object >(key);
+        if(!obj)
+        {
+            obj = this->getInOut< ::fwData::Object >(key);
+        }
+        if (obj)
+        {
+            for(::fwRuntime::ConfigurationElement::sptr connect :  m_connect)
+            {
+                this->manageConnection(key, obj, connect);
+            }
+            for(::fwRuntime::ConfigurationElement::sptr proxy :  m_proxies)
+            {
+                this->manageProxy(key, obj, proxy);
+            }
         }
     }
 }
