@@ -4,7 +4,7 @@ macro(add_target)
     
     file(GLOB_RECURSE HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} include/* )
     file(GLOB_RECURSE SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/* )
-    file(GLOB_RECURSE RCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} rc/* )
+    file(GLOB_RECURSE RCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/rc rc/* )
     
     if(TYPE STREQUAL "EXECUTABLE" )
         add_executable(${PROJECT_NAME} ${HDRS} ${SRCS})
@@ -21,8 +21,7 @@ macro(add_target)
         )
     
     elseif( TYPE STREQUAL "APP" )
-        add_custom_target(${PROJECT_NAME}
-        )
+        add_custom_target(${PROJECT_NAME})
         add_dependencies(${PROJECT_NAME} ${PRIVATE_LINKS})
 
         set(RESSOURCES_BUILD_PATH ${CMAKE_BINARY_DIR}/Bundles/${PROJECT_NAME}_${DASH_VERSION})
@@ -102,6 +101,8 @@ macro(add_target)
                 IMMEDIATE @ONLY)
             
             target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/include)
+        else()
+            add_custom_target(${PROJECT_NAME}) 
         endif()
         
         if( TYPE STREQUAL "LIBRARY" )
@@ -158,16 +159,13 @@ macro(add_target)
     
     if(RCS)
         foreach(RESSOURCE_FILE ${RCS})
-            
-            get_filename_component(FILE_NAME ${RESSOURCE_FILE} NAME)
             if(NOT IS_DIRECTORY ${RESSOURCES_BUILD_PATH})
                 file(MAKE_DIRECTORY ${RESSOURCES_BUILD_PATH})
             endif()
-            # if(NOT IS_DIRECTORY ${RESSOURCES_INSTALL_PATH})
-            #     file(MAKE_DIRECTORY ${RESSOURCES_INSTALL_PATH})
-            # endif()
-            configure_file(${RESSOURCE_FILE} ${RESSOURCES_BUILD_PATH}/${FILE_NAME})
-            install(FILES ${RESSOURCES_BUILD_PATH}/${FILE_NAME} DESTINATION ${RESSOURCES_INSTALL_PATH})
+
+            string(LENGTH ${RESSOURCE_FILE} FILE_PATH_LENGTH)
+            configure_file(rc/${RESSOURCE_FILE} ${RESSOURCES_BUILD_PATH}/${RESSOURCE_FILE})
+            install(FILES ${RESSOURCES_BUILD_PATH}/${RESSOURCE_FILE} DESTINATION ${RESSOURCES_INSTALL_PATH}/${RESSOURCE_FILE})
         endforeach()
     endif()
 
