@@ -1,19 +1,30 @@
-fwLoadProperties()
-
+project(fwDicomIOFilterQt VERSION 0.1)
 
 find_package (Boost REQUIRED)
-fwForwardInclude(${Boost_INCLUDE_DIRS})
-
 find_package(DCMTK REQUIRED)
-fwForwardInclude( ${DCMTK_config_INCLUDE_DIRS} )
-fwLink( ${DCMTK_LIBRARIES} )
-
 find_package(Qt5 COMPONENTS Core Gui Widgets Concurrent REQUIRED)
-fwLink(
-    ${Qt5Core_LIBRARIES}
-    ${Qt5Gui_LIBRARIES}
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5Concurrent_LIBRARIES}
+
+set(PUBLIC_INCLUDES
+    ${Boost_INCLUDE_DIRS}
+    ${DCMTK_config_INCLUDE_DIRS}
 )
 
-set_target_properties(${FWPROJECT_NAME} PROPERTIES AUTOMOC TRUE)
+set(PRIVATE_LINKS
+     ${DCMTK_LIBRARIES}
+     ${Qt5Core_LIBRARIES}
+     ${Qt5Gui_LIBRARIES}
+     ${Qt5Widgets_LIBRARIES}
+     ${Qt5Concurrent_LIBRARIES}
+     fwCore
+     fwTools
+     fwMedData
+     fwDicomIOFilter
+     fwGui
+     fwGuiQt
+     fwDcmtkTools
+ )
+
+add_target()
+
+set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC TRUE)
+
