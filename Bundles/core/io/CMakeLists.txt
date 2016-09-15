@@ -8,3 +8,4 @@ set(PRIVATE_LINKS
     fwServices
 )
 
+add_target()

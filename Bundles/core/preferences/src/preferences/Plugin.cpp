@@ -48,7 +48,7 @@ void Plugin::start() throw(::fwRuntime::RuntimeException)
 
         if ( m_preferences->find( "PREFERENCES_VERSION" ) == m_preferences->end() )
         {
-            ::fwData::String::sptr version            = ::fwData::String::New( PREFERENCES_VER );
+            ::fwData::String::sptr version            = ::fwData::String::New( preferences_VERSION );
             (*m_preferences)[ "PREFERENCES_VERSION" ] = version;
         }
     }
