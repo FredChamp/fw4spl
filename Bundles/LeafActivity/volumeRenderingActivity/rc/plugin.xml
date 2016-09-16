@@ -1,8 +1,8 @@
 <plugin id="volumeRenderingActivity" version="@DASH_VERSION@" >
 
     <requirement id="servicesReg" />
-    <requirement id="2DVisualizationActivity" />
-    <requirement id="3DVisualizationActivity" />
+    <requirement id="2DVisualizationActivity2" />
+    <requirement id="3DVisualizationActivity2" />
     <requirement id="visuVTKVRAdaptor" />
     <requirement id="scene2D" />
     <requirement id="uiTF" />
@@ -28,8 +28,8 @@
         <builder>::fwActivities::builder::ActivitySeries</builder>
         <appConfig id="VolumeRendering">
             <parameters>
-                <parameter replace="imageUid" by="@values.imageSeries.image" />
-                <parameter replace="optionalModelSeriesCompositeUid" by="@values.modelSeries" />
+                <parameter replace="image" uid="@values.imageSeries.image" />
+                <parameter replace="optionalModelSeriesComposite" uid="@values.modelSeries" />
             </parameters>
         </appConfig>
     </extension>

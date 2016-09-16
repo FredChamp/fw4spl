@@ -1,24 +1,45 @@
-fwLoadProperties()
-
+project(ioPacs VERSION 0.1)
 
 find_package(Boost COMPONENTS filesystem REQUIRED)
-fwForwardInclude(${Boost_INCLUDE_DIRS})
-
 find_package(DCMTK REQUIRED)
-fwInclude( ${DCMTK_config_INCLUDE_DIRS} )
-fwLink( ${DCMTK_LIBRARIES} )
-
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
-fwForwardInclude(
+
+set(PUBLIC_INCLUDES
+    ${Boost_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Gui_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
 )
 
-fwLink(
+set(PRIVATE_INCLUDES
+    ${DCMTK_config_INCLUDE_DIRS}
+)
+
+set(PRIVATE_LINKS
+    ${DCMTK_LIBRARIES}
     ${Qt5Core_LIBRARIES}
     ${Qt5Gui_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    
+    fwCore
+    fwThread
+    fwCom
+    fwComEd
+    fwGui
+    fwGuiQt
+    fwPacsIO
+    fwRuntime
+    fwTools
+    fwData
+    fwMedData
+    fwServices
+    gui
+    io
+    
+    dataReg
+    servicesReg
 )
 
-set_target_properties(${FWPROJECT_NAME} PROPERTIES AUTOMOC TRUE)
+add_target()
+
+set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC TRUE)

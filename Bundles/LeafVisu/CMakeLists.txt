@@ -1,0 +1,8 @@
+add_subdirectory(scene2D)
+add_subdirectory(visuVTK)
+add_subdirectory(visuVTKAdaptor)
+add_subdirectory(visuVTKQt)
+add_subdirectory(visuVTKVRAdaptor)
+add_subdirectory(vtkCompositeMesh)
+add_subdirectory(vtkSimpleMesh)
+add_subdirectory(vtkSimpleNegato)

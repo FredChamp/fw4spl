@@ -1,10 +1,25 @@
-fwLoadProperties()
+project(vtkCompositeMesh VERSION 0.1)
 
 find_package(VTK COMPONENTS vtkInteractionWidgets REQUIRED NO_MODULE)
 
-fwForwardInclude(
+set(PUBLIC_INCLUDES
     ${VTK_INCLUDE_DIRS}
 )
-fwLink(
-    ${VTK_LIBRARIES}    
+
+set(PRIVATE_LINKS
+    ${VTK_LIBRARIES}
+    
+    fwCom
+    fwComEd
+    fwData
+    fwRender
+    fwRenderVTK
+    fwRuntime
+    fwServices
+    fwVtkIO
+    fwGui
+    fwTools
+    fwCore
 )
+
+add_target()

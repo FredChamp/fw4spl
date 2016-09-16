@@ -103,7 +103,7 @@ void TransferFunctionEditor::configuring() throw( ::fwTools::Failed )
     if (useDefaultPath)
     {
         ::boost::filesystem::path pathRoot (std::string(BUNDLE_PREFIX) + "/uiTF_" + std::string(
-                                                UITF_VER) + "/tf");
+                                                uiTF_VERSION) + "/tf");
         m_paths.push_back(pathRoot);
     }
 }
@@ -125,32 +125,32 @@ void TransferFunctionEditor::starting() throw( ::fwTools::Failed )
     m_pTransferFunctionPreset = new QComboBox(m_container);
 
     ::boost::filesystem::path deletePath (std::string(BUNDLE_PREFIX) + "/uiTF_" + std::string(
-                                              UITF_VER) + "/delete.png");
+                                              uiTF_VERSION) + "/delete.png");
     m_deleteButton = new QPushButton(QIcon(deletePath.string().c_str()), "", m_container);
     m_deleteButton->setToolTip(QString("Delete"));
 
-    ::boost::filesystem::path newPath (std::string(BUNDLE_PREFIX) +"/uiTF_" + std::string(UITF_VER) +
+    ::boost::filesystem::path newPath (std::string(BUNDLE_PREFIX) +"/uiTF_" + std::string(uiTF_VERSION) +
                                        "/new.png");
     m_newButton = new QPushButton(QIcon(newPath.string().c_str()), "", m_container);
     m_newButton->setToolTip(QString("New"));
 
     ::boost::filesystem::path reinitializePath (std::string(BUNDLE_PREFIX) +"/uiTF_" + std::string(
-                                                    UITF_VER) + "/reinitialize.png");
+                                                    uiTF_VERSION) + "/reinitialize.png");
     m_reinitializeButton = new QPushButton(QIcon(reinitializePath.string().c_str()), "", m_container);
     m_reinitializeButton->setToolTip(QString("Reinitialize"));
 
     ::boost::filesystem::path renamePath (std::string(BUNDLE_PREFIX) + "/uiTF_" + std::string(
-                                              UITF_VER) + "/rename.png");
+                                              uiTF_VERSION) + "/rename.png");
     m_renameButton = new QPushButton(QIcon(renamePath.string().c_str()), "", m_container);
     m_renameButton->setToolTip(QString("Rename"));
 
     ::boost::filesystem::path importPath (std::string(BUNDLE_PREFIX) + "/uiTF_" + std::string(
-                                              UITF_VER) + "/import.png");
+                                              uiTF_VERSION) + "/import.png");
     m_importButton = new QPushButton(QIcon(importPath.string().c_str()), "", m_container);
     m_importButton->setToolTip(QString("Import"));
 
     ::boost::filesystem::path exportPath (std::string(BUNDLE_PREFIX) + "/uiTF_" + std::string(
-                                              UITF_VER) + "/export.png");
+                                              uiTF_VERSION) + "/export.png");
     m_exportButton = new QPushButton(QIcon(exportPath.string().c_str()), "", m_container);
     m_exportButton->setToolTip(QString("Export"));
 

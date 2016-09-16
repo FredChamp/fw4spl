@@ -1,23 +1,48 @@
-fwLoadProperties()
+project(vtkSimpleMesh VERSION 0.1)
 
-if(ANDROID)
-find_package(VTK COMPONENTS     
+# Just look one core module to get the version number
+find_package(VTK COMPONENTS
+        vtkCommonCore
+        REQUIRED
+        NO_MODULE)
+        
+if(${VTK_MAJOR_VERSION} STREQUAL "7")
+    find_package(VTK COMPONENTS
         vtkRenderingOpenGL2
         vtkInteractionStyle
-        REQUIRED
-        NO_MODULE)
+        vtkRenderingFreeType
+    REQUIRED
+    NO_MODULE)
 else()
-find_package(VTK COMPONENTS       
+    find_package(VTK COMPONENTS
         vtkRenderingOpenGL
-        vtkRenderingFreeTypeOpenGL
-        vtkInteractionWidgets
-        REQUIRED
-        NO_MODULE)
-
+        vtkInteractionStyle
+        vtkRenderingFreeType
+    REQUIRED
+    NO_MODULE)
 endif()
 
 include(${VTK_USE_FILE})
 
-fwForwardInclude( ${VTK_INCLUDE_DIRS} )
-fwLink( ${VTK_LIBRARIES} )
+set(PUBLIC_INCLUDES
+    ${VTK_INCLUDE_DIRS}
+)
 
+set(PRIVATE_LINKS
+    ${VTK_LIBRARIES}
+    
+    fwCom
+    fwComEd
+    fwCore
+    fwData
+    fwDataTools
+    fwRender
+    fwRenderVTK
+    fwRuntime
+    fwServices
+    fwVtkIO
+    fwGui
+    fwTools
+)
+
+add_target()

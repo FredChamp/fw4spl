@@ -1,166 +1,160 @@
-<extension implements="::fwServices::registry::AppConfig">
+<extension implements="::fwServices::registry::AppConfig2">
     <id>2DVisualization</id>
     <parameters>
         <param name="WID_PARENT" />
-        <param name="GENERIC_UID" />
         <param name="SERIESDB" />
         <param name="AS_UID" />
-        <param name="imageUid" />
+        <param name="image" />
     </parameters>
     <config>
+        <object uid="${SERIESDB}" type="::fwMedData::SeriesDB" src="ref" />
+        <object uid="${AS_UID}" type="::fwMedData::ActivitySeries" src="ref" />
+        <object uid="${image}" type="::fwData::Image" src="ref" />
 
-        <object type="::fwData::Composite">
+        <service uid="mainView" type="::gui::view::SDefaultView">
+            <gui>
+                <layout type="::fwGui::CardinalLayoutManager">
+                    <view caption="Negato1" align="center" />
+                    <view caption="Negato2" align="right" />
+                    <view caption="Negato3" align="right" />
+                </layout>
+                <toolBar />
+            </gui>
+            <registry>
+                <parent wid="${WID_PARENT}" />
+                <toolBar sid="toolBar" start="yes" />
+                <view wid="view_negato1" />
+                <view wid="view_negato2" />
+                <view wid="view_negato3" />
+            </registry>
+        </service>
 
-            <service uid="${GENERIC_UID}_mainView" type="::gui::view::IView" impl="::gui::view::SDefaultView" autoConnect="no">
-                <gui>
-                    <layout type="::fwGui::CardinalLayoutManager">
-                        <view caption="Negato1" align="center" />
-                        <view caption="Negato2" align="right" minWidth="350" />
-                        <view caption="Negato3" align="right" minWidth="350" />
-                    </layout>
-                    <toolBar />
-                </gui>
-                <registry>
-                    <parent wid="${WID_PARENT}" />
-                    <toolBar sid="${GENERIC_UID}_toolBar" start="yes" />
-                    <view wid="${GENERIC_UID}_view_negato1" />
-                    <view wid="${GENERIC_UID}_view_negato2" />
-                    <view wid="${GENERIC_UID}_view_negato3" />
-                </registry>
-            </service>
+        <service uid="toolBar" type="::gui::aspect::SDefaultToolBar">
+            <gui>
+                <layout>
+                    <menuItem name="New landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Add-landmark.png" />
+                    <menuItem name="Remove landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Remove-landmark.png" />
+                    <menuItem name="Load landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Load-landmark.png" />
+                    <menuItem name="Save landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Save-landmark.png" />
+                    <menuItem name="Focus landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Find-landmark.png" />
+                    <menuItem name="Hide/Show landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/View-landmark.png" />
+                    <separator />
+                    <menuItem name="Add distance" icon="@BUNDLE_PREFIX@/media_0-1/icons/distance.png" />
+                    <menuItem name="Remove distance" icon="@BUNDLE_PREFIX@/media_0-1/icons/RemoveDistance.png" />
+                    <menuItem name="Hide distance" icon="@BUNDLE_PREFIX@/media_0-1/icons/HideDistance.png" style="check" />
+                    <separator />
+                    <menuItem name="Hide cross" icon="@BUNDLE_PREFIX@/media_0-1/icons/HideCross.png" style="radio" />
+                    <menuItem name="Show normal cross" icon="@BUNDLE_PREFIX@/media_0-1/icons/NormalCross.png" style="radio" />
+                    <menuItem name="Show full cross" icon="@BUNDLE_PREFIX@/media_0-1/icons/FullCross.png" style="radio" />
+                    <separator />
+                    <menuItem name="Export Activity" icon="@BUNDLE_PREFIX@/media_0-1/icons/Export.svg" />
+                </layout>
+            </gui>
+            <registry>
+                <menuItem sid="ActionNewLandmark" start="yes" />
+                <menuItem sid="ActionRemoveLandmark" start="yes" />
+                <menuItem sid="ActionLoadLandmark" start="yes" />
+                <menuItem sid="ActionSaveLandmark" start="yes" />
+                <menuItem sid="ActionFocusLandmark" start="yes" />
+                <menuItem sid="ActionHideLandmark" start="yes" />
+                <menuItem sid="ActionAddDistance" start="yes" />
+                <menuItem sid="ActionRemoveDistance" start="yes" />
+                <menuItem sid="ActionHideDistance" start="yes" />
+                <menuItem sid="ActionHideCross" start="yes" />
+                <menuItem sid="ActionShowNormalCross" start="yes" />
+                <menuItem sid="ActionShowFullCross" start="yes" />
+                <menuItem sid="ActionExportActivity" start="yes" />
+            </registry>
+        </service>
 
-            <service uid="${GENERIC_UID}_toolBar" type="::fwGui::IToolBarSrv" impl="::gui::aspect::SDefaultToolBar" autoConnect="no">
-                <gui>
-                    <layout>
-                        <menuItem name="New landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Add-landmark.png" />
-                        <menuItem name="Remove landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Remove-landmark.png" />
-                        <menuItem name="Load landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Load-landmark.png" />
-                        <menuItem name="Save landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Save-landmark.png" />
-                        <menuItem name="Focus landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/Find-landmark.png" />
-                        <menuItem name="Hide/Show landmark" icon="@BUNDLE_PREFIX@/media_0-1/icons/View-landmark.png" />
-                        <separator />
-                        <menuItem name="Add distance" icon="@BUNDLE_PREFIX@/media_0-1/icons/distance.png" />
-                        <menuItem name="Remove distance" icon="@BUNDLE_PREFIX@/media_0-1/icons/RemoveDistance.png" />
-                        <menuItem name="Hide distance" icon="@BUNDLE_PREFIX@/media_0-1/icons/HideDistance.png" style="check" />
-                        <separator />
-                        <menuItem name="Hide cross" icon="@BUNDLE_PREFIX@/media_0-1/icons/HideCross.png" style="radio" />
-                        <menuItem name="Show normal cross" icon="@BUNDLE_PREFIX@/media_0-1/icons/NormalCross.png" style="radio" />
-                        <menuItem name="Show full cross" icon="@BUNDLE_PREFIX@/media_0-1/icons/FullCross.png" style="radio" />
-                        <separator />
-                        <menuItem name="Export Activity" icon="@BUNDLE_PREFIX@/media_0-1/icons/Export.svg" />
-                    </layout>
-                </gui>
-                <registry>
-                    <menuItem sid="${GENERIC_UID}_ActionNewLandmark" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionRemoveLandmark" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionLoadLandmark" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionSaveLandmark" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionFocusLandmark" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionHideLandmark" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionAddDistance" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionRemoveDistance" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionHideDistance" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionHideCross" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionShowNormalCross" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionShowFullCross" start="yes" />
-                    <menuItem sid="${GENERIC_UID}_ActionExportActivity" start="yes" />
-                </registry>
-            </service>
+        <service uid="cfgNegato1" type="::fwServices::SConfigController">
+            <appConfig id="2DNegato" />
+            <inout key="image" uid="${image}" />
+            <parameter replace="WID_PARENT" uid="view_negato1" />
+            <parameter replace="CrossTypeChannel" uid="crossTypeChannel" />
+            <parameter replace="orientation" by="axial" />
+        </service>
 
-            <item key="seriesDB">
-                <object uid="${SERIESDB}" src="ref" type="::fwMedData::SeriesDB">
-                    <service uid="${GENERIC_UID}_ActionExportActivity" type="::fwGui::IActionSrv" impl="::uiMedData::action::SExportSeries" autoConnect="yes">
-                        <seriesId>${AS_UID}</seriesId>
-                    </service>
-                </object>
-            </item>
+        <service uid="cfgNegato2" type="::fwServices::SConfigController">
+            <appConfig id="2DNegato" />
+            <inout key="image" uid="${image}" />
+            <parameter replace="WID_PARENT" uid="view_negato2" />
+            <parameter replace="CrossTypeChannel" uid="crossTypeChannel" />
+            <parameter replace="orientation" by="frontal" />
+        </service>
 
-            <item key="activitySeries">
-                <object uid="${AS_UID}" src="ref" type="::fwMedData::ActivitySeries" />
-            </item>
+        <service uid="cfgNegato3" type="::fwServices::SConfigController">
+            <appConfig id="2DNegato" />
+            <inout key="image" uid="${image}" />
+            <parameter replace="WID_PARENT" uid="view_negato3" />
+            <parameter replace="CrossTypeChannel" uid="crossTypeChannel" />
+            <parameter replace="orientation" by="sagittal" />
+        </service>
 
-            <item key="imageKey">
-                <object uid="${imageUid}" src="ref" type="::fwData::Image">
-                    <service uid="${GENERIC_UID}_MedicalImageSrv" impl="::ctrlSelection::MedicalImageSrv" type="::fwServices::IController" autoConnect="no" />
+        <service uid="ActionExportActivity" type="::uiMedData::action::SExportSeries" autoConnect="yes">
+            <inout key="seriesDB" uid="${SERIESDB}" />
+            <inout key="series" uid="${AS_UID}" />
+        </service>
 
-                    <service uid="${GENERIC_UID}_cfgNegato1" impl="::fwServices::SConfigController" autoConnect="no">
-                        <config>
-                            <appConfig id="2DNegato">
-                                <parameters>
-                                    <parameter replace="imageUid" by="self" />
-                                    <parameter replace="orientation" by="axial" />
-                                    <parameter replace="WID_PARENT" by="${GENERIC_UID}_view_negato1" />
-                                    <parameter replace="CrossTypeChannel" by="crossTypeChannel" />
-                                </parameters>
-                            </appConfig>
-                        </config>
-                    </service>
+        <service uid="MedicalImageSrv" type="::ctrlSelection::MedicalImageSrv" autoConnect="yes">
+            <inout key="image" uid="${image}" />
+        </service>
 
-                    <service uid="${GENERIC_UID}_cfgNegato2" impl="::fwServices::SConfigController" autoConnect="no">
-                        <config>
-                            <appConfig id="2DNegato">
-                                <parameters>
-                                    <parameter replace="imageUid" by="self" />
-                                    <parameter replace="orientation" by="frontal" />
-                                    <parameter replace="WID_PARENT" by="${GENERIC_UID}_view_negato2" />
-                                    <parameter replace="CrossTypeChannel" by="crossTypeChannel" />
-                                </parameters>
-                            </appConfig>
-                        </config>
-                    </service>
+        <service uid="ActionFocusLandmark" type="::uiMeasurement::action::FocusLandmark" >
+            <in key="image" uid="${image}" />
+        </service>
+        <service uid="ActionNewLandmark" type="::uiMeasurement::action::AddLandmark" >
+            <inout key="image" uid="${image}" />
+        </service>
+        <service uid="ActionRemoveLandmark" type="::uiMeasurement::action::RemoveLandmark" >
+            <in key="image" uid="${image}" />
+        </service>
+        <service uid="ActionLoadLandmark" type="::uiMeasurement::action::LoadLandmark" >
+            <in key="image" uid="${image}" />
+        </service>
+        <service uid="ActionSaveLandmark" type="::uiMeasurement::action::SaveLandmark" >
+            <in key="image" uid="${image}" />
+        </service>
+        <service uid="ActionHideLandmark" type="::uiMeasurement::action::ShowLandmark" autoConnect="yes" >
+            <in key="image" uid="${image}" />
+        </service>
+        <service uid="ActionAddDistance" type="::uiMeasurement::action::AddDistance" >
+            <in key="image" uid="${image}" />
+        </service>
+        <service uid="ActionRemoveDistance" type="::uiMeasurement::action::RemoveDistance" >
+            <in key="image" uid="${image}" />
+        </service>
+        <service uid="ActionHideDistance" type="::uiMeasurement::action::ShowDistance" autoConnect="yes" >
+            <in key="image" uid="${image}" />
+        </service>
+        <service uid="ActionHideCross" type="::uiVisu::action::CrossTypeAction">
+            <in key="image" uid="${image}" />
+            <crossType>hide</crossType>
+        </service>
+        <service uid="ActionShowNormalCross" type="::uiVisu::action::CrossTypeAction">
+            <in key="image" uid="${image}" />
+            <crossType>half</crossType>
+            <state active="true" />
+        </service>
+        <service uid="ActionShowFullCross" type="::uiVisu::action::CrossTypeAction">
+            <in key="image" uid="${image}" />
+            <crossType>full</crossType>
+        </service>
 
-                    <service uid="${GENERIC_UID}_cfgNegato3" impl="::fwServices::SConfigController" autoConnect="no">
-                        <config>
-                            <appConfig id="2DNegato">
-                                <parameters>
-                                    <parameter replace="imageUid" by="self" />
-                                    <parameter replace="orientation" by="sagittal" />
-                                    <parameter replace="WID_PARENT" by="${GENERIC_UID}_view_negato3" />
-                                    <parameter replace="CrossTypeChannel" by="crossTypeChannel" />
-                                </parameters>
-                            </appConfig>
-                        </config>
-                    </service>
-
-
-                    <service uid="${GENERIC_UID}_ActionFocusLandmark" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::FocusLandmark" autoConnect="no" />
-                    <service uid="${GENERIC_UID}_ActionNewLandmark" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::AddLandmark" autoConnect="no" />
-                    <service uid="${GENERIC_UID}_ActionRemoveLandmark" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::RemoveLandmark" autoConnect="no" />
-                    <service uid="${GENERIC_UID}_ActionLoadLandmark" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::LoadLandmark" autoConnect="no" />
-                    <service uid="${GENERIC_UID}_ActionSaveLandmark" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::SaveLandmark" autoConnect="no" />
-                    <service uid="${GENERIC_UID}_ActionHideLandmark" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::ShowLandmark" autoConnect="yes" />
-                    <service uid="${GENERIC_UID}_ActionAddDistance" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::AddDistance" autoConnect="no" />
-                    <service uid="${GENERIC_UID}_ActionRemoveDistance" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::RemoveDistance" autoConnect="no" />
-                    <service uid="${GENERIC_UID}_ActionHideDistance" type="::fwGui::IActionSrv" impl="::uiMeasurement::action::ShowDistance" autoConnect="yes" />
-                    <service uid="${GENERIC_UID}_ActionHideCross" type="::fwGui::IActionSrv" impl="::uiVisu::action::CrossTypeAction" autoConnect="no">
-                        <crossType>hide</crossType>
-                    </service>
-                    <service uid="${GENERIC_UID}_ActionShowNormalCross" type="::fwGui::IActionSrv" impl="::uiVisu::action::CrossTypeAction" autoConnect="no">
-                        <crossType>half</crossType>
-                        <state active="true" />
-                    </service>
-                    <service uid="${GENERIC_UID}_ActionShowFullCross" type="::fwGui::IActionSrv" impl="::uiVisu::action::CrossTypeAction" autoConnect="no">
-                        <crossType>full</crossType>
-                    </service>
-                </object>
-            </item>
-
-            <proxy channel="crossTypeChannel">
-                <signal>${GENERIC_UID}_ActionHideCross/crossTypeModified</signal>
-                <signal>${GENERIC_UID}_ActionShowNormalCross/crossTypeModified</signal>
-                <signal>${GENERIC_UID}_ActionShowFullCross/crossTypeModified</signal>
-            </proxy>
+        <connect channel="crossTypeChannel">
+            <signal>ActionHideCross/crossTypeModified</signal>
+            <signal>ActionShowNormalCross/crossTypeModified</signal>
+            <signal>ActionShowFullCross/crossTypeModified</signal>
+        </connect>
 
 
-            <!-- START AND STOP SERVICES -->
-            <start uid="${GENERIC_UID}_mainView" />
-            <start uid="${GENERIC_UID}_MedicalImageSrv" />
+        <!-- START AND STOP SERVICES -->
+        <start uid="mainView" />
+        <start uid="MedicalImageSrv" />
 
-            <start uid="${GENERIC_UID}_cfgNegato1" />
-            <start uid="${GENERIC_UID}_cfgNegato2" />
-            <start uid="${GENERIC_UID}_cfgNegato3" />
-
-        </object>
+        <start uid="cfgNegato1" />
+        <start uid="cfgNegato2" />
+        <start uid="cfgNegato3" />
 
     </config>
 </extension>

@@ -1,0 +1,4 @@
+add_subdirectory(ctrlCamp)
+add_subdirectory(ctrlMemory)
+add_subdirectory(ctrlSelection)
+add_subdirectory(monitor)
