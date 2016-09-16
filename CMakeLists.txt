@@ -81,7 +81,7 @@ if(ADDITIONAL_PROJECTS)
     endforeach()
 endif()
 
-set(BUNDLE_PREFIX "bundles")
+set(BUNDLE_PREFIX "Bundles")
 
 # Set warning level and function export visibility on Unix
 if(UNIX)
@@ -147,6 +147,7 @@ set(SPYLOG_LEVEL_MAP_info 4)
 set(SPYLOG_LEVEL_MAP_debug 5)
 set(SPYLOG_LEVEL_MAP_trace 6)
 set_property(CACHE SPYLOG_LEVEL PROPERTY STRINGS ${SPYLOG_LEVEL_VALUES} )
+add_definitions(-DSPYLOG_LEVEL=${SPYLOG_LEVEL})
 
 # require C++11 standard by default
 if(ANDROID)
@@ -190,3 +191,5 @@ add_subdirectory(SrcLib)
 add_subdirectory(Bundles)
 
 add_subdirectory(Samples)
+
+add_subdirectory(Apps)

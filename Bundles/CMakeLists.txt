@@ -1,4 +1,13 @@
 set(TYPE BUNDLE)
 
 add_subdirectory(core)
+add_subdirectory(LeafActivity)
+add_subdirectory(LeafAtomFilter)
+add_subdirectory(LeafCtrl)
+add_subdirectory(LeafIO)
+add_subdirectory(LeafOp)
+add_subdirectory(LeafPatch)
+add_subdirectory(LeafRegistration)
 add_subdirectory(LeafUI)
+add_subdirectory(LeafVisu)
+add_subdirectory(media)
