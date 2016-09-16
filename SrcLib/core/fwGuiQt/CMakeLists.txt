@@ -13,6 +13,9 @@ set(PUBLIC_INCLUDES
     ${Qt5Concurrent_INCLUDE_DIRS}
 )
 
+set(PUBLIC_LINKS
+    fwGui
+)
 set(PRIVATE_LINKS
     ${Qt5Core_LIBRARIES}
     ${Qt5Gui_LIBRARIES}

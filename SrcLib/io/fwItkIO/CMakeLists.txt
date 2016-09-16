@@ -38,6 +38,8 @@ set(PUBLIC_LINKS
     ITKMetaIO
     itksys
     itkopenjpeg
+    
+    fwDataIO
 )
 
 
@@ -47,7 +49,6 @@ set(PRIVATE_LINKS
     fwComEd
     fwCore
     fwData
-    fwDataIO
     fwTools
 )
 

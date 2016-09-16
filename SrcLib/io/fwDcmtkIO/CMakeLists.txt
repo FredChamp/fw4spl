@@ -8,11 +8,14 @@ set(PUBLIC_INCLUDES
     ${DCMTK_config_INCLUDE_DIRS}
 )
 
+set(PUBLIC_LINKS
+    fwDataIO
+)
+
 set(PRIVATE_LINKS
     ${Boost_REGEX_LIBRARY}
     ${DCMTK_LIBRARIES}
     fwCore
-    fwDataIO
     fwTools
     fwData
     fwThread

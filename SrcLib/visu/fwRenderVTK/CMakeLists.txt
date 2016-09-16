@@ -41,6 +41,10 @@ set(PUBLIC_INCLUDES
     ${VTK_INCLUDE_DIRS}
 )
 
+set(PUBLIC_LINKS
+    fwRender
+)
+
 set(PRIVATE_LINKS
     ${VTK_LIBRARIES}
     fwCom
@@ -48,7 +52,6 @@ set(PRIVATE_LINKS
     fwCore
     fwData
     fwGui
-    fwRender
     fwRuntime
     fwServices
     fwTools

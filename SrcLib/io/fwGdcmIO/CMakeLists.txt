@@ -10,6 +10,10 @@ set(PUBLIC_INCLUDES
     ${GDCM_INCLUDE_DIRS}
 )
 
+set(PUBLIC_LINKS
+        fwZip
+)
+
 set(PRIVATE_LINKS
     ${Boost_LIBRARIES}
     ${GDCM_LIBRARIES}
@@ -27,7 +31,6 @@ set(PRIVATE_LINKS
     fwLog
     fwJobs
     fwCom
-    fwZip
     fwDicomTools
     fwDataTools
     fwServices
